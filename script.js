@@ -184,35 +184,6 @@
     TEXTAREA.value = letters2.join("");
   }
 
-  function renderKeyBoard() {
-    KEYBOARD.innerHTML = null;
-
-    keyEventCode.forEach((code) => {
-      const container = document.getElementById("keybord-box");
-
-      let btn = code;
-
-      if (isEnglish && KEYS[code] && KEYS[code].en) {
-        btn = KEYS[code].en;
-      }
-
-      if (!isEnglish && KEYS[code] && KEYS[code].ru) {
-        btn = KEYS[code].ru;
-      }
-
-      let text = document.createTextNode(btn);
-      let keyboardKey = document.createElement("div");
-      keyboardKey.setAttribute("id", code);
-      keyboardKey.classList.add("key");
-      keyboardKey.appendChild(text);
-      container.appendChild(keyboardKey);
-
-      document.getElementById(code).addEventListener("click", () => {
-        handleBtnInput(code, KEYS[code], KEYS[code]);
-      });
-    });
-  }
-
   document.addEventListener("keydown", function (event) {
     let pressedKey = document.getElementById(event.code);
     isShift = event.shiftKey;
@@ -236,7 +207,7 @@
   function toggleLocale() {
     isEnglish = !isEnglish;
 
-    renderKeyBoard();
+    rskeyboard.renderKeyBoard();
   }
 
   document.onkeydown = function (event) {
@@ -281,5 +252,40 @@
     }
   };
 
-  renderKeyBoard();
+  class RSKeyaboadr {
+    constructor() {}
+
+    renderKeyBoard() {
+      KEYBOARD.innerHTML = null;
+  
+      keyEventCode.forEach((code) => {
+        const container = document.getElementById("keybord-box");
+  
+        let btn = code;
+  
+        if (isEnglish && KEYS[code] && KEYS[code].en) {
+          btn = KEYS[code].en;
+        }
+  
+        if (!isEnglish && KEYS[code] && KEYS[code].ru) {
+          btn = KEYS[code].ru;
+        }
+  
+        let text = document.createTextNode(btn);
+        let keyboardKey = document.createElement("div");
+        keyboardKey.setAttribute("id", code);
+        keyboardKey.classList.add("key");
+        keyboardKey.appendChild(text);
+        container.appendChild(keyboardKey);
+  
+        document.getElementById(code).addEventListener("click", () => {
+          handleBtnInput(code, KEYS[code], KEYS[code]);
+        });
+      });
+    }
+  }
+
+  const rskeyboard = new RSKeyaboadr();
+
+  rskeyboard.renderKeyBoard();
 })();
