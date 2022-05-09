@@ -7,7 +7,6 @@
   let isShift = false;
   let isAltPresssed = false;
   let isCapsLock = false;
-  let isCtrlKeyPresssed = false;
   let isEnglish = true; 
 
   const TITLE = document.createElement("p");
@@ -21,18 +20,8 @@
   const TEXTAREA = document.createElement("textarea");
   TEXTAREA.classList.add("textarea");
 
-  function handleBtnInput(code, ru, en, isCTRLPressed, event) {
-
-    // let prevAltPressed = false;
-
-    // if (!prevAltPressed && event.altKey) {
-    //   isAltPresssed = true;
-    // }
-    // if (prevAltPressed && !event.altKey) {
-    //   isAltPresssed = false;
-    // }
-    // prevAltPressed = event.altKey;
-
+  function handleBtnInput(code, ru, en, isCTRLPressed) {
+    let letter = KEYS[code].en;
 
     switch (code) {
       case "MetaLeft":
@@ -63,8 +52,6 @@
       case "CapsLock":
         isCapsLock = !isCapsLock;
         break;
-      case "MetaLeft":
-        break;
       case "Backspace":
         letters2.splice(cursorPosition - 1, 1);
         break;
@@ -81,7 +68,6 @@
 
         break;
       default:
-        let letter = KEYS[code].en;
 
         if (!isEnglish && KEYS[code].ru) {
           letter = KEYS[code].ru;
@@ -188,46 +174,23 @@
     "ControlRight",
   ];
 
-  let textareavalue = TEXTAREA.value;
-
-  TEXTAREA.addEventListener("focusout", () => {
-    textareavalue = TEXTAREA.value;
-  });
-
   TEXTAREA.addEventListener("focusin", () => {
     cursorPosition = TEXTAREA.selectionEnd;
   });
 
-  let letterLeft = [];
-  const letterRight = [];
   let cursorPosition = 0;
 
-  window.addEventListener("languagechange", function () {
-    alert(1);
-    console.log("languagechange event detected!");
-  });
   function updateTeaxtArea() {
-
-    const letters = letterLeft.map((l) => {
-      return KEYS[l] ? KEYS[l].en : "";
-    });
-
     TEXTAREA.value = letters2.join("");
   }
 
   function renderKeyBoard() {
     KEYBOARD.innerHTML = null;
 
-    console.log("renderKeyBoard", isEnglish);
-
-    keyEventCode.forEach((code, index) => {
+    keyEventCode.forEach((code) => {
       const container = document.getElementById("keybord-box");
 
       let btn = code;
-
-      if (!KEYS[code].en) {
-        console.log("renderKeyBoard", code);
-      }
 
       if (isEnglish && KEYS[code] && KEYS[code].en) {
         btn = KEYS[code].en;
@@ -244,9 +207,7 @@
       keyboardKey.appendChild(text);
       container.appendChild(keyboardKey);
 
-
-      document.getElementById(code).addEventListener("click", function (event) {
-        inputValue = textareavalue.split("");
+      document.getElementById(code).addEventListener("click", () => {
         handleBtnInput(code, KEYS[code], KEYS[code]);
       });
     });
@@ -256,17 +217,14 @@
     let pressedKey = document.getElementById(event.code);
     isShift = event.shiftKey;
     isAltPresssed = event.altKey;
-    isCtrlKeyPresssed = event.ctrlKey;
     pressedKey.classList.add("key-pressed");
   });
+  
   document.addEventListener("keyup", function (event) {
     let pressedKey = document.getElementById(event.code);
 
-    // console.log("up");
-    // console.log(event);
     isShift = event.shiftKey;
     isAltPresssed = event.altKey;
-    isCtrlKeyPresssed = event.ctrlKey;
 
     if (isAltPresssed && !isShift) {
       isEnglish = !isEnglish;
@@ -277,7 +235,6 @@
 
   function toggleLocale() {
     isEnglish = !isEnglish;
-    console.log("isEnglish", isEnglish);
 
     renderKeyBoard();
   }
