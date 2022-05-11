@@ -1,5 +1,4 @@
 (function () {
-  alert('просьба проверить в последний день')
   const BODY = document.getElementById("body");
   const KEYS = window.RS_SCHOOL.KEYS || {};
 
